@@ -32,6 +32,26 @@ The central REST API and orchestration engine for the AI-Powered Smart Irrigatio
 4. **Automated Weekly Field Health Summary:**
    * Background task scheduled via APScheduler that aggregates 7-day field telemetry metrics and broadcasts push notifications via Ntfy.sh.
 
+## 🏗️ System Architecture & Data Pipeline
+
+```text
++-------------------+      HTTP POST /api/telemetry     +-------------------+
+|    ESP32 NODE     | --------------------------------> |   FLASK BACKEND   |
+|  - DHT11 (GPIO 4) |                                   |     (Python)      |
+|  - Soil (GPIO 34) | <-------------------------------- |                   |
+|  - Relay (GPIO 26)|        JSON Relay Response        +---------+---------+
++-------------------+                                             |
+                                                                  |
+            +---------------------------------+-------------------+---------------------------------+
+            |                                 |                                                     |
+            v                                 v                                                     v
++-----------------------+         +-----------------------+                             +-----------------------+
+|  OpenWeatherMap API   |         |   Random Forest ML    |                             |   Tailwind Dashboard  |
+|  - 3-Hour Rain Vol    |         | (`irrigation_model`)  |                             |   - 3s Live Polling   |
+|  - Rain Probability   |         |  - 7 Feature Vector   |                             |   - Telemetry Visuals |
+|  - Forecast Temp/Hum  |         |  - Binary Inference   |                             |   - Manual Override   |
++-----------------------+         +-----------------------+                             +-----------------------+
+
 ---
 
 ## 📡 API Endpoints
