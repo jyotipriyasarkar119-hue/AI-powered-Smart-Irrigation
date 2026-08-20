@@ -1,190 +1,171 @@
 # 🌱 AI-Powered Smart Irrigation System
 
-> **An IoT + Machine Learning based autonomous irrigation platform that combines real-time environmental sensing, weather forecasting, predictive intelligence, and automated pump control.**
+> An IoT + Machine Learning based autonomous irrigation platform that combines real-time environmental sensing, weather forecasting, predictive intelligence, and automated pump control.
 
-[![ESP32](https://img.shields.io/badge/Hardware-ESP32-blue?logo=espressif)](https://www.espressif.com/)
+[![Hardware](https://img.shields.io/badge/Hardware-ESP32-blue?logo=espressif)](https://www.espressif.com/)
+[![Backend](https://img.shields.io/badge/Backend-Flask-black?logo=flask)](https://flask.palletsprojects.com/)
 [![Python](https://img.shields.io/badge/Python-3.x-yellow?logo=python)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Backend-Flask-black?logo=flask)](https://flask.palletsprojects.com/)
-[![Scikit-Learn](https://img.shields.io/badge/ML-Scikit--Learn-orange?logo=scikit-learn)](https://scikit-learn.org/)
-[![SQLite](https://img.shields.io/badge/Database-SQLite-blue?logo=sqlite)](https://www.sqlite.org/)
-[![Tailwind CSS](https://img.shields.io/badge/UI-Tailwind%20CSS-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![ML](https://img.shields.io/badge/ML-Scikit--Learn-orange?logo=scikit-learn)](https://scikit-learn.org/)
+[![Database](https://img.shields.io/badge/Database-SQLite-blue?logo=sqlite)](https://www.sqlite.org/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 
 ---
 
 ## 📌 Overview
 
-The **AI-Powered Smart Irrigation System** is a closed-loop agricultural automation system designed to make irrigation decisions using a combination of **real-time field measurements and short-term weather forecasts**.
+The **AI-Powered Smart Irrigation System** is a closed-loop agricultural automation project that combines edge sensing, weather intelligence, machine learning, a backend processing layer, persistent telemetry storage, and automated pump control.
 
-An ESP32 edge node continuously collects:
+An ESP32 sensing node collects:
 
 - 🌡️ Temperature
 - 💧 Relative humidity
 - 🌱 Soil moisture
 
-The telemetry is transmitted to a Python/Flask processing server, where it is combined with weather information such as:
+The backend combines this telemetry with forecast information such as:
 
-- 🌧️ Forecast rainfall
+- 🌧️ Rainfall
 - ☔ Rain probability
 - 🌡️ Forecast temperature
 - 💦 Forecast humidity
 
-A **Random Forest Classifier** processes these seven features and produces an irrigation recommendation.
-
-The final decision is then returned to the ESP32, which controls an **active-LOW relay and water pump**.
+A **Random Forest Classifier** uses these seven features to produce an irrigation recommendation. The final command is returned to the ESP32, which drives an **active-LOW relay** controlling the irrigation pump.
 
 ```text
-                   🌱 SMART IRRIGATION SYSTEM
-                              │
-                              ▼
-                     ┌─────────────────┐
-                     │  Field Sensors  │
-                     └────────┬────────┘
-                              │
-                              ▼
-                     ┌─────────────────┐
-                     │      ESP32      │
-                     │   Edge Node     │
-                     └────────┬────────┘
-                              │
-                       HTTP Telemetry
-                              │
-                              ▼
-                     ┌─────────────────┐
-                     │ Flask Backend   │
-                     └────────┬────────┘
-                              │
-             ┌────────────────┼────────────────┐
-             │                │                │
-             ▼                ▼                ▼
-      ┌─────────────┐  ┌─────────────┐  ┌──────────────┐
-      │   Weather   │  │   SQLite    │  │ Random Forest│
-      │     API     │  │  Database   │  │     Model    │
-      └──────┬──────┘  └─────────────┘  └───────┬──────┘
-             │                                   │
-             └────────────────┬──────────────────┘
-                              ▼
-                     ┌─────────────────┐
-                     │ Decision Engine │
-                     └────────┬────────┘
-                              │
-                        Relay Command
-                              │
-                              ▼
-                     ┌─────────────────┐
-                     │ Water Pump      │
-                     └────────┬────────┘
-                              │
-                              ▼
-                           🌱 Soil
-                              │
-                              └───────────↺
+                         🌱 SMART IRRIGATION SYSTEM
+
+ ┌──────────────────────┐
+ │   FIELD SENSORS      │
+ │  DHT11 + Soil Sensor │
+ └──────────┬───────────┘
+            │
+            ▼
+ ┌──────────────────────┐
+ │        ESP32         │
+ │      Edge Node       │
+ └──────────┬───────────┘
+            │ HTTP Telemetry
+            ▼
+ ┌──────────────────────────────┐
+ │       FLASK BACKEND          │
+ │ Ingestion + Fusion + Control │
+ └──────────────┬───────────────┘
+                │
+        ┌───────┼────────┬──────────┐
+        │       │        │          │
+        ▼       ▼        ▼          ▼
+   Weather   SQLite   Random     Dashboard
+     API    Database   Forest      APIs
+        │       │        │          │
+        └───────┴────────┴──────────┘
+                │
+                ▼
+       ┌──────────────────┐
+       │ Decision Engine  │
+       └────────┬─────────┘
+                │
+                ▼
+       ┌──────────────────┐
+       │ Relay / Pump     │
+       └────────┬─────────┘
+                │
+                ▼
+             🌱 SOIL
+                │
+                └───────────────↺
 ```
 
 ---
 
-# ✨ Key Features
+## ✨ Key Features
 
-- 📡 **Real-time IoT sensing** using ESP32
-- 🌡️ Temperature and humidity monitoring
-- 🌱 Analog soil-moisture measurement
-- 🌦️ Weather forecast integration
-- 🤖 Random Forest based irrigation prediction
-- 🔄 Closed-loop automated control
-- 💾 Persistent SQLite telemetry storage
-- 📊 Live web dashboard
-- 🎛️ Manual `AUTO / FORCE ON / FORCE OFF` control
+- 📡 Real-time IoT sensing with ESP32
+- 🌡️ Temperature and humidity monitoring using DHT11
+- 🌱 Analog soil-moisture monitoring
+- 🌦️ External weather forecast integration
+- 🤖 Random Forest irrigation classification
+- 🔄 Closed-loop automated irrigation
+- 💾 SQLite telemetry storage
+- 📊 Live browser dashboard
+- 🎛️ `AUTO`, `FORCE_ON`, and `FORCE_OFF` control modes
 - 🛡️ Weather API fallback handling
-- 🧯 ML model failure safety logic
+- 🧯 ML inference fallback safety logic
 - ⚡ Active-LOW relay control
-- 🔌 Pump power isolation
-- 📝 AI decision explanation
-- ⏱️ Background maintenance using APScheduler
-- 🔔 Optional field-health notifications through Ntfy.sh
+- 🔌 Separate pump power path
+- 📝 Human-readable AI decision suggestion
+- ⏱️ Background task support with APScheduler
+- 🔔 Optional notifications through Ntfy.sh
 
 ---
 
 # 🏗️ System Architecture
 
-The project is organized into four primary operational layers:
+The system is organized into four functional layers.
 
 ```text
-┌───────────────────────────────────────────────────────────────┐
-│                     EDGE HARDWARE                             │
-│                                                               │
-│ ESP32 + DHT11 + Soil Moisture Sensor + Relay + Pump          │
-└───────────────────────────┬───────────────────────────────────┘
-                            │
-                            │ HTTP POST
-                            ▼
-┌───────────────────────────────────────────────────────────────┐
-│                     PROCESSING LAYER                          │
-│                                                               │
-│ Flask + Data Fusion + Decision Engine + API Routing          │
-└──────────────┬────────────────┬────────────────┬─────────────┘
-               │                │                │
-               ▼                ▼                ▼
-        Weather API          SQLite       Random Forest
-               │                │                │
-               └────────────────┼────────────────┘
+┌────────────────────────────────────────────────────────────────────┐
+│                         EDGE / HARDWARE                            │
+│                                                                    │
+│ ESP32 + DHT11 + Soil Moisture Sensor + Relay + Pump               │
+└───────────────────────────────┬────────────────────────────────────┘
+                                │
+                                │ HTTP POST
                                 ▼
-┌───────────────────────────────────────────────────────────────┐
-│                     PRESENTATION LAYER                        │
-│                                                               │
-│       Tailwind CSS + JavaScript Live Dashboard                │
-└───────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────┐
+│                         BACKEND / PROCESSING                      │
+│                                                                    │
+│ Flask API + Data Fusion + Decision Logic + Database Interface    │
+└──────────────────────┬───────────────────────┬─────────────────────┘
+                       │                       │
+                       ▼                       ▼
+                ┌─────────────┐        ┌──────────────┐
+                │ Weather API │        │ ML / Dataset │
+                └──────┬──────┘        └──────┬───────┘
+                       │                      │
+                       └──────────┬───────────┘
+                                  ▼
+                         ┌─────────────────┐
+                         │ SQLite Storage  │
+                         └────────┬────────┘
+                                  │
+                                  ▼
+┌────────────────────────────────────────────────────────────────────┐
+│                        FRONTEND / DASHBOARD                       │
+│                                                                    │
+│                    HTML + JavaScript UI                           │
+└────────────────────────────────────────────────────────────────────┘
 ```
 
-Detailed architecture documentation is available in:
-
-```text
-docs/architecture/system-architecture.md
-```
+Detailed system documentation is available in [`docs/system-architecture.md`](docs/system-architecture.md).
 
 ---
 
 # 🔄 End-to-End Data Flow
 
-The system follows a five-stage control cycle:
-
 ```text
-1. Sampling
-      ↓
-2. Ingestion
-      ↓
-3. Weather Fusion
-      ↓
-4. ML Inference
-      ↓
-5. Actuation
-      ↓
-Next Sensor Cycle
-      ↺
+1. Sensor Sampling
+       ↓
+2. ESP32 Telemetry
+       ↓
+3. Flask Ingestion
+       ↓
+4. Weather Data Fusion
+       ↓
+5. Random Forest Inference
+       ↓
+6. Manual Override / Safety Logic
+       ↓
+7. Relay Command
+       ↓
+8. Pump Actuation
+       ↓
+9. Telemetry Persistence
+       ↓
+10. Next Cycle ↺
 ```
 
-## 1. Sampling
+The ESP32 typically samples the environment every few seconds, constructs a JSON payload, and posts it to the backend.
 
-The ESP32 reads:
-
-```text
-Temperature
-Humidity
-Soil Moisture
-```
-
-at a configurable interval, typically around **3–5 seconds**.
-
----
-
-## 2. Ingestion
-
-The ESP32 constructs a JSON payload and sends it to:
-
-```http
-POST /api/telemetry
-```
-
-Example:
+Example telemetry:
 
 ```json
 {
@@ -194,126 +175,58 @@ Example:
 }
 ```
 
----
-
-## 3. Weather Fusion
-
-The Flask backend obtains forecast information using the configured field coordinates.
-
-The weather data is combined with the ESP32 measurements.
-
-```text
-ESP32 Data
-    +
-Weather Forecast
-    ↓
-Feature Vector
-```
-
----
-
-## 4. ML Inference
-
-The Random Forest receives:
+The backend enriches the request with weather data and creates the seven-feature ML input:
 
 ```text
 [
-    temperature,
-    humidity,
-    soil_moisture,
-    rainfall,
-    rain_probability,
-    forecast_temperature,
-    forecast_humidity
+  temperature,
+  humidity,
+  soil_moisture,
+  rainfall,
+  rain_probability,
+  forecast_temperature,
+  forecast_humidity
 ]
 ```
 
-The model returns:
+---
+
+# 🤖 Machine Learning
+
+## Model
+
+The current ML pipeline uses:
+
+```text
+RandomForestClassifier
+```
+
+with the following features:
+
+| Feature | Source | Unit |
+|---|---|---|
+| `temperature` | DHT11 | °C |
+| `humidity` | DHT11 | % |
+| `soil_moisture` | Soil sensor | % |
+| `rainfall` | Weather API | mm |
+| `rain_probability` | Weather API | % |
+| `forecast_temperature` | Weather API | °C |
+| `forecast_humidity` | Weather API | % |
+
+Output:
 
 ```text
 0 → Irrigation not required
 1 → Irrigation required
 ```
 
----
+The ML research/development material currently lives under [`ML/`](ML/), including:
 
-## 5. Actuation
+- [`ML/README.md`](ML/README.md)
+- [`ML/notebooks/Smart_Irrigation.ipynb`](ML/notebooks/Smart_Irrigation.ipynb)
+- [`ML/rice_irrigation_dataset_v2.csv`](ML/rice_irrigation_dataset_v2.csv)
 
-The backend applies:
-
-```text
-ML Prediction
-      +
-Manual Override
-      +
-Safety Logic
-      ↓
-Final Relay State
-```
-
-The result is returned to the ESP32.
-
-```text
-relay = true
-    ↓
-GPIO 26 = LOW
-    ↓
-Relay ON
-    ↓
-Pump ON
-```
-
----
-
-# 🧠 Machine Learning
-
-## Model
-
-The current system uses:
-
-```text
-RandomForestClassifier
-```
-
-from Scikit-Learn.
-
-The model uses seven input features:
-
-| Feature | Source | Unit |
-|---|---|---|
-| `temperature` | DHT11 | °C |
-| `humidity` | DHT11 | % |
-| `soil_moisture` | Soil Sensor | % |
-| `rainfall` | Weather API | mm |
-| `rain_probability` | Weather API | % |
-| `forecast_temperature` | Weather API | °C |
-| `forecast_humidity` | Weather API | % |
-
-The model output is:
-
-```text
-0 → OFF
-1 → ON
-```
-
-### Model Artifact
-
-```text
-irrigation_model.pkl
-```
-
-The trained model is serialized using `joblib`.
-
-For development, the backend can automatically generate a model when the expected model artifact is missing.
-
-> **Important:** A generated/synthetic training dataset is suitable for testing the software pipeline but should not be considered a validated agricultural model. Production deployment should use properly labeled real-world field data.
-
-Detailed documentation:
-
-```text
-machine-learning/model.md
-machine-learning/features.md
-```
+> **Important:** Training-data quality directly affects model reliability. A development dataset or synthetic labels should not be treated as a field-validated irrigation policy without appropriate agronomic validation.
 
 ---
 
@@ -323,73 +236,40 @@ machine-learning/features.md
 
 | Component | Purpose |
 |---|---|
-| ESP32 Dev Module | Edge controller |
-| DHT11 | Temperature and humidity |
-| Analog Soil Sensor | Soil moisture |
-| 5V Relay Module | Pump switching |
-| Water Pump | Irrigation actuator |
+| ESP32 Dev Module | Edge controller and Wi-Fi node |
+| DHT11 | Temperature and relative humidity |
+| Analog soil-moisture sensor | Soil moisture measurement |
+| 5V active-LOW relay | Pump switching |
+| Water pump | Irrigation actuator |
 
----
-
-## ESP32 Pinout
+## Current ESP32 Pin Mapping
 
 | ESP32 Pin | Component | Function |
 |---|---|---|
-| GPIO 4 | DHT11 | Temperature/Humidity DATA |
-| GPIO 34 | Soil Sensor | Analog input |
+| GPIO 4 | DHT11 | Temperature / humidity data |
+| GPIO 34 | Soil sensor | Analog input |
 | GPIO 26 | Relay | Pump control |
-| 3.3V | Sensors | Sensor supply where supported |
-| GND | Sensors/Relay | Low-voltage ground |
 
-### Relay Logic
-
-The relay is **active-LOW**:
+Relay logic:
 
 ```text
-GPIO 26 = LOW
-    ↓
-Relay ON
-    ↓
-Pump ON
+GPIO 26 = LOW  → Relay ON  → Pump ON
+GPIO 26 = HIGH → Relay OFF → Pump OFF
 ```
 
-```text
-GPIO 26 = HIGH
-    ↓
-Relay OFF
-    ↓
-Pump OFF
-```
+The pump should be powered from an appropriately rated external supply. Do not drive the pump directly from an ESP32 GPIO.
 
-The pump should use a suitable external power supply.
+Hardware documentation is currently maintained in [`docs/circuit-diagram.md`](docs/circuit-diagram.md).
 
-> ⚠️ Do not connect a pump directly to an ESP32 GPIO. For mains-powered equipment, use appropriately rated switching hardware, protection, isolation, enclosure, and qualified installation.
-
-Hardware documentation:
-
-```text
-hardware/circuit-diagram.md
-hardware/sensor-connections.md
-hardware/pinout.md
-```
+> ⚠️ For mains-powered pumps, use suitable isolation, switching hardware, protection, enclosure, wiring, and qualified electrical installation practices.
 
 ---
 
-# 🗄️ Database
+# 🗄️ Data Storage
 
-The current implementation uses:
+The backend uses SQLite for local telemetry persistence.
 
-```text
-SQLite
-```
-
-Database:
-
-```text
-telemetry.db
-```
-
-The main telemetry table stores:
+The logical telemetry record contains fields for:
 
 ```text
 id
@@ -405,796 +285,319 @@ relay_status
 ai_suggestion
 ```
 
-Example record:
-
-```text
-Temperature       → 28.4 °C
-Humidity          → 72.1 %
-Soil Moisture     → 34.7 %
-Rainfall          → 1.2 mm
-Rain Probability  → 60 %
-Forecast Temp     → 27.9 °C
-Forecast Humidity → 75 %
-Relay Status      → OFF
-AI Suggestion     → Irrigation not required
-```
+The database file is intentionally treated as runtime data and should not be committed as a source artifact.
 
 ---
 
-# 🌐 REST API
+# 🌐 Backend
 
-## Telemetry
+The backend entry point currently present in the repository is:
+
+```text
+backend/app.py
+```
+
+A backend overview is available at [`backend/README.md`](backend/README.md).
+
+The Flask server is responsible for:
+
+- Receiving ESP32 telemetry
+- Validating and processing input data
+- Calling the weather service
+- Constructing ML features
+- Running irrigation inference
+- Applying manual overrides
+- Persisting telemetry
+- Serving dashboard data
+
+Conceptual endpoints used by the system include:
 
 ```http
 POST /api/telemetry
-```
-
-Receives sensor data from the ESP32.
-
-Example:
-
-```json
-{
-  "temperature": 28.4,
-  "humidity": 72.1,
-  "soil_moisture": 34.7
-}
-```
-
-Response:
-
-```json
-{
-  "relay": false
-}
-```
-
----
-
-## Dashboard
-
-```http
-GET /api/dashboard/latest
-```
-
-Returns the latest system state.
-
-Example:
-
-```json
-{
-  "temperature": 28.4,
-  "humidity": 72.1,
-  "soil_moisture": 34.7,
-  "rainfall": 1.2,
-  "rain_probability": 60,
-  "forecast_temperature": 27.9,
-  "forecast_humidity": 75,
-  "relay_status": false,
-  "ai_suggestion": "Irrigation not required"
-}
-```
-
----
-
-## Manual Override
-
-```http
+GET  /api/dashboard/latest
 POST /api/dashboard/override
 ```
 
-Supported modes:
-
-```text
-AUTO
-FORCE_ON
-FORCE_OFF
-```
-
-Example:
-
-```json
-{
-  "mode": "FORCE_ON"
-}
-```
+The exact endpoint behavior should be treated as defined by the current implementation in `backend/app.py`.
 
 ---
 
-# 🎛️ Control Modes
+# 🌐 Frontend
 
-The system supports three operating modes.
+The live dashboard source is maintained under [`frontend/`](frontend/).
 
-## AUTO
-
-```text
-Sensor Data
-     +
-Weather
-     ↓
-Random Forest
-     ↓
-Relay Decision
-```
-
----
-
-## FORCE ON
-
-The pump is manually forced ON.
+Current repository files include:
 
 ```text
-FORCE_ON
-    ↓
-Relay ON
-    ↓
-Pump ON
-```
-
----
-
-## FORCE OFF
-
-The pump is manually forced OFF.
-
-```text
-FORCE_OFF
-     ↓
-Relay OFF
-     ↓
-Pump OFF
-```
-
-Manual control takes precedence over the automatic ML decision until the system is returned to `AUTO`.
-
----
-
-# 🛡️ Reliability & Fail-Safe Design
-
-The system contains multiple fallback mechanisms.
-
-## Weather API Failure
-
-If the weather API becomes unavailable, the backend can use configured fallback values:
-
-```text
-Forecast Temperature = 25 °C
-Forecast Humidity    = 50 %
-Rain Probability     = 0 %
-Rainfall             = 0 mm
-```
-
-The failure should also be logged.
-
----
-
-## ML Model Failure
-
-If the model cannot be loaded or inference fails, a deterministic safety rule can be used.
-
-Example:
-
-```text
-IF soil_moisture < 30%
-    → Pump ON
-ELSE
-    → Pump OFF
-```
-
-This is a fallback mechanism rather than a substitute for a properly trained production model.
-
----
-
-## Hardware Failure
-
-The relay uses a normally-open configuration so that loss of ESP32 power can cause the pump circuit to default to an open state.
-
-```text
-ESP32 Power Loss
-       ↓
-Relay De-energized
-       ↓
-NO Contact Open
-       ↓
-Pump OFF
-```
-
----
-
-# 📊 Live Dashboard
-
-The frontend is designed as a single-page monitoring dashboard.
-
-Technologies:
-
-```text
-HTML
-CSS
-JavaScript
-Tailwind CSS
-Font Awesome 6
-```
-
-The browser periodically requests:
-
-```http
-GET /api/dashboard/latest
-```
-
-approximately every **3 seconds**.
-
-The dashboard can display:
-
-- Current temperature
-- Current humidity
-- Soil moisture
-- Rainfall
-- Rain probability
-- Forecast temperature
-- Forecast humidity
-- Pump state
-- AI recommendation
-- Control mode
-- System status
-
----
-
-# 📁 Repository Structure
-
-```text
-smart-irrigation/
-│
+frontend/
 ├── README.md
-├── .gitignore
-├── .env.example
-├── requirements.txt
-│
-├── backend/
-│   ├── app.py
-│   │
-│   ├── models/
-│   │   └── telemetry.py
-│   │
-│   ├── services/
-│   │   ├── weather_service.py
-│   │   ├── ml_service.py
-│   │   └── irrigation_service.py
-│   │
-│   ├── scheduler/
-│   │   └── tasks.py
-│   │
-│   ├── ml/
-│   │   ├── train.py
-│   │   ├── dataset_generator.py
-│   │   └── irrigation_model.pkl
-│   │
-│   └── database/
-│       └── telemetry.db
-│
-├── frontend/
-│   ├── index.html
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── dashboard.js
-│
-├── esp32/
-│   ├── src/
-│   │   ├── main.ino
-│   │   ├── config.h
-│   │   ├── sensors.h
-│   │   ├── sensors.cpp
-│   │   ├── network.h
-│   │   └── network.cpp
-│   │
-│   └── config/
-│       └── config.example.h
-│
-├── machine-learning/
-│   ├── model.md
-│   └── features.md
-│
-├── hardware/
-│   ├── circuit-diagram.md
-│   ├── sensor-connections.md
-│   └── pinout.md
-│
-├── docs/
-│   └── architecture/
-│       ├── system-architecture.md
-│       ├── data-flow.md
-│       └── control-flow.md
-│
-├── tests/
-│   ├── test_api.py
-│   ├── test_ml.py
-│   └── test_irrigation.py
-│
-└── scripts/
-    ├── init_database.py
-    └── train_model.py
+├── index.html
+└── assets/
+    └── Screenshot From 2026-08-21 01-05-32.png
 ```
+
+The dashboard is intended to present current telemetry, weather information, AI recommendations, pump state, and manual controls.
+
+Frontend documentation: [`frontend/README.md`](frontend/README.md)
 
 ---
 
-# ⚙️ Technology Stack
+# 📡 Firmware
 
-## Hardware
+The ESP32 firmware is maintained under [`firmware/`](firmware/).
 
-```text
-ESP32
-DHT11
-Analog Soil Moisture Sensor
-5V Relay
-Water Pump
-```
-
-## Backend
+The current repository contains the source at:
 
 ```text
-Python
-Flask
-SQLAlchemy
-APScheduler
-Requests
-Joblib
-Scikit-Learn
+firmware/ esp32/Source_Code.ino
 ```
 
-## Machine Learning
-
-```text
-Random Forest Classifier
-Scikit-Learn
-Joblib
-```
-
-## Database
-
-```text
-SQLite
-```
-
-## Frontend
-
-```text
-HTML
-CSS
-JavaScript
-Tailwind CSS
-Font Awesome
-```
-
-## External Services
-
-```text
-OpenWeatherMap
-Ntfy.sh
-```
-
----
-
-# 🚀 Getting Started
-
-## 1. Clone the Repository
-
-```bash
-git clone <YOUR_REPOSITORY_URL>
-cd smart-irrigation
-```
-
----
-
-# 2. Create a Python Virtual Environment
-
-```bash
-python3 -m venv .venv
-```
-
-Activate it:
-
-### Linux/macOS
-
-```bash
-source .venv/bin/activate
-```
-
-### Windows
-
-```powershell
-.venv\Scripts\activate
-```
-
----
-
-# 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-# 4. Configure Environment Variables
-
-Copy:
-
-```bash
-cp .env.example .env
-```
-
-Configure the required values.
-
-Example:
-
-```env
-OPENWEATHER_API_KEY=your_api_key
-FIELD_LAT=your_latitude
-FIELD_LON=your_longitude
-
-DATABASE_URL=sqlite:///telemetry.db
-
-SECRET_KEY=change_this_secret
-```
-
-Do **not** commit `.env` to Git.
-
----
-
-# 5. Initialize the Database
-
-Run the project's database initialization script if provided:
-
-```bash
-python scripts/init_database.py
-```
-
----
-
-# 6. Start the Backend
-
-```bash
-python backend/app.py
-```
-
-The Flask server should start on the configured local host/port.
-
-Typical development URL:
-
-```text
-http://127.0.0.1:5000
-```
-
----
-
-# 7. Open the Dashboard
-
-Open the frontend through the configured Flask route or local development server.
-
-The dashboard should display:
-
-```text
-Sensor Data
-Weather Data
-AI Recommendation
-Pump State
-Control Mode
-```
-
----
-
-# 🔌 ESP32 Setup
-
-Configure the ESP32 using:
-
-```text
-esp32/config/config.example.h
-```
-
-Create your local configuration:
-
-```text
-esp32/config/config.h
-```
-
-Configure:
-
-```text
-Wi-Fi SSID
-Wi-Fi Password
-Backend URL
-API endpoint
-GPIO assignments
-```
-
-Example pin configuration:
-
-```cpp
-#define DHT_PIN       4
-#define SOIL_PIN      34
-#define RELAY_PIN     26
-```
-
-Upload the firmware to the ESP32.
-
----
-
-# 🧪 Testing the System
-
-A recommended testing order is:
-
-```text
-1. Test DHT11
-       ↓
-2. Test soil sensor
-       ↓
-3. Test ESP32 Wi-Fi
-       ↓
-4. Test Flask API
-       ↓
-5. Test database insertion
-       ↓
-6. Test weather API
-       ↓
-7. Test ML inference
-       ↓
-8. Test relay
-       ↓
-9. Test dashboard
-       ↓
-10. Test complete closed-loop operation
-```
-
-Start with the pump disconnected and verify the relay logic before connecting the complete actuator circuit.
-
----
-
-# 📈 Model Development
-
-The ML development workflow is:
-
-```text
-Collect Data
-     ↓
-Clean Data
-     ↓
-Create Labels
-     ↓
-Feature Engineering
-     ↓
-Train Model
-     ↓
-Validate Model
-     ↓
-Evaluate Metrics
-     ↓
-Serialize Model
-     ↓
-Deploy
-```
-
-Recommended evaluation metrics:
-
-```text
-Accuracy
-Precision
-Recall
-F1-score
-Confusion Matrix
-```
-
-For agricultural deployment, also evaluate the practical consequences of false positives and false negatives.
-
----
-
-# 🔬 Research & Development Direction
-
-This project can evolve into a more advanced research platform.
-
-Potential future directions include:
-
-### Predictive Soil Moisture
-
-```text
-Current Conditions
-       ↓
-Time-Series Model
-       ↓
-Future Soil Moisture
-```
-
-### Multi-Zone Irrigation
-
-```text
-ESP32 Zone 1 ─┐
-ESP32 Zone 2 ─┤
-ESP32 Zone 3 ─┼──→ Central Processing
-ESP32 Zone 4 ─┘
-```
-
-### Edge AI
-
-```text
-ESP32
-  ↓
-Local ML Inference
-  ↓
-Immediate Control
-
-        +
-        
-Cloud/Local Server
-  ↓
-Analytics + Dashboard
-```
-
-### Physics-Informed Irrigation
-
-Future versions can incorporate:
-
-- Evapotranspiration
-- Soil-water balance
-- Crop coefficients
-- Root-zone moisture
-- Solar radiation
-- Wind speed
-- Vapor pressure deficit
-
----
-
-# 🌍 Sustainability
-
-The system is designed around the principle:
-
-> **Irrigate when the field requires water, not simply when a fixed timer says it is time.**
-
-By combining field measurements with forecast information, the system can potentially reduce:
-
-- Unnecessary water consumption
-- Unnecessary pump operation
-- Energy consumption
-- Manual irrigation effort
-
-Actual water savings should be measured experimentally rather than assumed.
-
----
-
-# ⚠️ Safety Notes
-
-This project controls physical equipment.
-
-Before deploying the system:
-
-- Verify sensor voltage compatibility.
-- Verify ESP32 GPIO voltage limits.
-- Use an appropriately rated relay.
-- Use a separate suitable supply for the pump.
-- Do not power the pump directly from the ESP32.
-- Use appropriate protection for inductive loads.
-- Keep hazardous-voltage wiring isolated from low-voltage electronics.
-- Use an enclosure for outdoor deployment.
-- Protect electronics from water and condensation.
-- Use appropriate fuses and circuit protection.
-- Follow local electrical safety requirements.
-
-For mains-powered pumps, use qualified electrical installation practices.
+> **Note:** The current directory name contains a leading space (`"firmware/ esp32"`). This README intentionally reflects the repository as it exists today rather than inventing a different path.
+
+The firmware is responsible for:
+
+1. Initializing the sensors
+2. Connecting to Wi-Fi
+3. Sampling environmental data
+4. Sending telemetry to the backend
+5. Receiving the relay decision
+6. Driving GPIO 26
+7. Repeating the control cycle
 
 ---
 
 # 📚 Documentation
 
-Detailed documentation is organized under:
+The current documentation tree is:
 
 ```text
 docs/
-hardware/
-machine-learning/
+├── circuit-diagram.md
+├── machine_learning_model.md
+└── system-architecture.md
 ```
 
-Important documents:
+Recommended entry points:
 
-```text
-docs/architecture/system-architecture.md
-hardware/circuit-diagram.md
-machine-learning/model.md
-machine-learning/features.md
-```
+- [System Architecture](docs/system-architecture.md)
+- [Circuit Diagram](docs/circuit-diagram.md)
+- [Machine Learning Model](docs/machine_learning_model.md)
 
 ---
 
-# 🗺️ Development Roadmap
+# 📁 Repository Structure
 
-## Phase 1 — Hardware
+This is the repository structure currently present on the `main` branch:
 
-- [x] ESP32 integration
-- [x] DHT11 integration
-- [x] Soil moisture sensing
-- [x] Relay control
-- [ ] Outdoor enclosure
-- [ ] Long-term power solution
+```text
+AI-powered-Smart-Irrigation/
+│
+├── .gitignore
+├── LICENSE
+├── README.md
+│
+├── ML/
+│   ├── README.md
+│   ├── notebooks/
+│   │   └── Smart_Irrigation.ipynb
+│   └── rice_irrigation_dataset_v2.csv
+│
+├── backend/
+│   ├── README.md
+│   └── app.py
+│
+├── docs/
+│   ├── circuit-diagram.md
+│   ├── machine_learning_model.md
+│   └── system-architecture.md
+│
+├── firmware/
+│   └──  esp32/
+│       └── Source_Code.ino
+│
+└── frontend/
+    ├── README.md
+    ├── index.html
+    └── assets/
+        └── Screenshot From 2026-08-21 01-05-32.png
+```
 
-## Phase 2 — Backend
+> GitHub currently reports the firmware directory as `firmware/ esp32` with a leading space. Renaming that directory to `firmware/esp32` would make the structure cleaner, but this README does not assume that change has been made.
 
-- [x] Flask API
-- [x] Telemetry ingestion
-- [x] SQLite storage
-- [x] Weather integration
-- [ ] Authentication
-- [ ] HTTPS deployment
+---
 
-## Phase 3 — Machine Learning
+# ⚙️ Local Development
 
-- [x] Random Forest pipeline
-- [x] Feature vector
-- [x] Model serialization
-- [x] Fallback model logic
-- [ ] Real field dataset
-- [ ] Hyperparameter optimization
-- [ ] Model versioning
-- [ ] Automated retraining
+## 1. Clone the repository
 
-## Phase 4 — Dashboard
+```bash
+git clone https://github.com/jyotipriyasarkar119-hue/AI-powered-Smart-Irrigation.git
+cd AI-powered-Smart-Irrigation
+```
 
-- [x] Live telemetry
-- [x] Pump status
-- [x] AI recommendation
-- [x] Manual override
-- [ ] Historical charts
-- [ ] Model confidence visualization
-- [ ] Alert center
+## 2. Backend environment
 
-## Phase 5 — Advanced System
+Create and activate a Python virtual environment:
 
-- [ ] MQTT
-- [ ] Multiple ESP32 nodes
-- [ ] Multi-zone irrigation
-- [ ] Predictive soil moisture
-- [ ] Edge ML
-- [ ] Crop-specific models
-- [ ] Physics-informed features
-- [ ] Automated model lifecycle
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Install the project's Python dependencies using the dependency specification used by your current backend setup.
+
+> The repository root currently does not contain a `requirements.txt` file, so the README does not prescribe a dependency file that is not present in the repository.
+
+## 3. Environment variables
+
+Keep API keys, Wi-Fi credentials, and other secrets outside source control.
+
+Typical configuration includes:
+
+```text
+OPENWEATHER_API_KEY
+FIELD_LAT
+FIELD_LON
+DATABASE_URL
+SECRET_KEY
+```
+
+Use your actual backend configuration rather than committing credentials to Git.
+
+## 4. Start the backend
+
+The current backend entry point is:
+
+```bash
+python backend/app.py
+```
+
+The exact runtime URL and configuration are determined by the current Flask application.
+
+## 5. Program the ESP32
+
+Open:
+
+```text
+firmware/ esp32/Source_Code.ino
+```
+
+Configure the board's Wi-Fi and backend settings as required by the source code, then flash the firmware using the Arduino IDE or another compatible ESP32 development environment.
+
+---
+
+# 🧪 Testing Strategy
+
+A practical testing sequence is:
+
+```text
+1. Test DHT11 readings
+        ↓
+2. Test soil-moisture ADC readings
+        ↓
+3. Test ESP32 Wi-Fi connectivity
+        ↓
+4. Test Flask telemetry ingestion
+        ↓
+5. Verify SQLite persistence
+        ↓
+6. Verify weather-data retrieval
+        ↓
+7. Verify ML inference
+        ↓
+8. Test relay without the pump connected
+        ↓
+9. Test the pump power circuit safely
+        ↓
+10. Run the complete closed loop
+```
+
+Always verify relay behavior before connecting a high-power actuator.
+
+---
+
+# 🛡️ Reliability and Safety
+
+The control architecture includes several fallback concepts:
+
+### Weather API Failure
+
+Use a defined fallback state when external forecast data is unavailable, and log that fallback condition.
+
+### ML Failure
+
+If model inference is unavailable, use a deterministic safety rule rather than allowing an undefined actuator state.
+
+### Manual Override
+
+`FORCE_ON` and `FORCE_OFF` are intended to take priority over automatic inference until the controller returns to `AUTO`.
+
+### Power Loss
+
+A normally-open relay path can help keep the pump off when the controller loses power, assuming the relay and pump circuit are wired accordingly.
+
+---
+
+# 🌍 Sustainability Goal
+
+The core objective is to move irrigation from a fixed-timer approach toward a data-driven control strategy:
+
+```text
+Current Field Conditions
+          +
+Weather Forecast
+          +
+Machine Learning
+          ↓
+Context-Aware Irrigation
+```
+
+The project is intended to reduce unnecessary irrigation and pump operation while maintaining responsive control to changing environmental conditions. Actual water and energy savings should be measured experimentally.
+
+---
+
+# 🚀 Future Development
+
+Potential extensions include:
+
+- MQTT-based telemetry
+- Multiple ESP32 sensor nodes
+- Zone-based irrigation
+- Historical analytics and charts
+- Real-field model retraining
+- Soil-moisture forecasting
+- Crop-specific models
+- Physics-informed irrigation features
+- Edge ML inference
+- PostgreSQL / time-series storage
+- Secure authentication and HTTPS
+- Automated model evaluation and deployment
 
 ---
 
 # 🤝 Contributing
 
-Contributions are welcome.
+Contributions, bug reports, and documentation improvements are welcome.
 
-A typical workflow is:
+Before submitting changes:
 
-```bash
-git checkout -b feature/your-feature
-```
-
-Make your changes, test them, and then:
-
-```bash
-git add .
-git commit -m "Add your feature"
-git push origin feature/your-feature
-```
-
-Open a pull request describing:
-
-- What changed
-- Why it changed
-- How it was tested
-- Any hardware requirements
-- Any database/model changes
+1. Keep secrets and local runtime data out of Git.
+2. Test hardware-facing changes carefully.
+3. Document API or database changes.
+4. Document ML feature changes and retraining requirements.
+5. Update the relevant documentation under `docs/`.
 
 ---
 
-# 📄 License
+# 📜 License
 
-This project is intended to be released under the **Apache 2.0 License**.
+Copyright © 2026 Jyotipriya Sarkar
 
-See:
+This project is licensed under the **Apache License, Version 2.0**. See [`LICENSE`](LICENSE) for the full license text.
 
 ```text
-LICENSE
+Apache-2.0
 ```
-
-for the complete license text.
 
 ---
 
@@ -1204,8 +607,15 @@ for the complete license text.
 
 Electronics Engineering | Microelectronics & VLSI | IoT | Machine Learning
 
-- GitHub: `https://github.com/jyotipriyasarkar119-hue`
-- LinkedIn: `https://www.linkedin.com/in/jyotipriya-sarkar`
+- GitHub: https://github.com/jyotipriyasarkar119-hue
+- LinkedIn: https://www.linkedin.com/in/jyotipriya-sarkar
 
 ---
 
+## ⭐ Core Principle
+
+```text
+SENSE → FUSE → PREDICT → DECIDE → ACT → OBSERVE → REPEAT
+```
+
+The system turns environmental sensing and weather information into an automated irrigation decision while keeping the architecture modular enough for future research and real-world agricultural deployment.
