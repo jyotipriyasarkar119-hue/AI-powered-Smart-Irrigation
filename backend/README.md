@@ -52,7 +52,7 @@ The central REST API and orchestration engine for the AI-Powered Smart Irrigatio
 |  - Forecast Temp/Hum  |         |  - Binary Inference   |                             |   - Manual Override   |
 +-----------------------+         +-----------------------+                             +-----------------------+
 
----
+```
 
 ## 📡 API Endpoints
 
