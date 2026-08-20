@@ -1,1 +1,297 @@
+# ============================================================
+# AI-Powered Smart Irrigation System
+# Git Ignore Configuration
+# ============================================================
 
+# ------------------------------------------------------------
+# Python
+# ------------------------------------------------------------
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Python test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Type checking / linting
+.mypy_cache/
+.pyright/
+.ruff_cache/
+
+
+# ------------------------------------------------------------
+# Environment & Secrets
+# ------------------------------------------------------------
+
+.env
+.env.*
+!.env.example
+
+# Local configuration files containing credentials
+config.local.*
+secrets.*
+*.secret
+
+# API keys / credentials
+credentials.json
+service-account.json
+
+
+# ------------------------------------------------------------
+# Database
+# ------------------------------------------------------------
+
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Project database
+backend/database/telemetry.db
+
+# SQLite journal / temporary files
+*.db-journal
+*.db-shm
+*.db-wal
+
+
+# ------------------------------------------------------------
+# Machine Learning
+# ------------------------------------------------------------
+
+# Trained model artifacts
+*.pkl
+*.pickle
+*.joblib
+
+# Local ML datasets
+*.csv
+*.parquet
+*.feather
+
+# ML experiment outputs
+mlruns/
+wandb/
+runs/
+checkpoints/
+
+# Keep model documentation and example configuration
+!machine-learning/*.md
+!machine-learning/**/README.md
+
+
+# ------------------------------------------------------------
+# Logs
+# ------------------------------------------------------------
+
+*.log
+logs/
+log/
+*.log.*
+
+# Application runtime logs
+backend/logs/
+backend/*.log
+
+
+# ------------------------------------------------------------
+# Generated Files
+# ------------------------------------------------------------
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# Generated reports
+reports/generated/
+output/
+outputs/
+
+# Generated HTML / analysis artifacts
+generated/
+artifacts/
+
+
+# ------------------------------------------------------------
+# Operating System
+# ------------------------------------------------------------
+
+# Linux
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+
+# ------------------------------------------------------------
+# IDE / Editors
+# ------------------------------------------------------------
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim
+*.swp
+*.swo
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+
+# ------------------------------------------------------------
+# Node.js / Frontend
+# ------------------------------------------------------------
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Frontend build output
+frontend/dist/
+frontend/build/
+frontend/.vite/
+
+# Optional local frontend environment
+frontend/.env
+frontend/.env.*
+
+
+# ------------------------------------------------------------
+# ESP32 / Arduino
+# ------------------------------------------------------------
+
+# Arduino build artifacts
+*.elf
+*.bin
+*.hex
+*.map
+
+# ESP32 generated files
+.pio/
+.vscode/
+
+# PlatformIO
+.platformio/
+
+# Arduino IDE
+arduino/
+*.ino.d/
+
+# Keep example configuration
+!esp32/config/config.example.h
+
+
+# ------------------------------------------------------------
+# Documentation Build Files
+# ------------------------------------------------------------
+
+docs/_build/
+site/
+.DS_Store
+
+
+# ------------------------------------------------------------
+# Local Development
+# ------------------------------------------------------------
+
+*.local
+*.local.*
+local/
+tmp/
+temp/
+
+# Local server state
+.server/
+.runtime/
+
+
+# ------------------------------------------------------------
+# Backup / Archive Files
+# ------------------------------------------------------------
+
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+
+# ------------------------------------------------------------
+# Security
+# ------------------------------------------------------------
+
+# Private keys / certificates
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# SSH keys
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+
+
+# ------------------------------------------------------------
+# Keep Important Example / Template Files
+# ------------------------------------------------------------
+
+# Environment template
+!.env.example
+
+# ESP32 configuration template
+!esp32/config/config.example.h
+
+# Documentation
+!docs/**/*.md
+
+# Source code
+!**/*.py
+!**/*.cpp
+!**/*.h
+!**/*.ino
+!**/*.html
+!**/*.css
+!**/*.js
